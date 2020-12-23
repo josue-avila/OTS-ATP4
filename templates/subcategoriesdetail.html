@@ -1,8 +1,10 @@
-<h1> Subcategories </h1>
-
+{% extends 'template.html' %}
+{% block body %}  
+<h3> Subcategories </h3>
 <ol> 
     {%for i in range(0, len)%} 
         <li>{{subcategories[i].get_name()}}</li> 
     {%endfor%} 
       
 </ol> 
+{% endblock %}

@@ -1,4 +1,6 @@
-<h1> Marketplaces </h1>
+{% extends 'template.html' %}
+{% block body %}  
+<h3> Marketplaces </h3>
 
 <ol> 
     {%for i in range(0, len)%} 
@@ -6,3 +8,5 @@
     {%endfor%} 
       
 </ol> 
+    
+{% endblock %}

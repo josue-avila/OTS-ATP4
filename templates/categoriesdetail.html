@@ -1,11 +1,11 @@
-<h1> Categories </h1>
+{% extends 'template.html' %}
+{% block body %}  
+<h3> Categories </h3>
 
 <ol> 
     {%for i in range(0, len)%} 
         <li>                
                 {{categories[i].get_name()}}
-     
         </li> 
     {%endfor%} 
-      
-</ol> 
+{% endblock %}
