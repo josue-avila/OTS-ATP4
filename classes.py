@@ -58,12 +58,12 @@ class SubCategory(Category):
     def set_parent(self, parent: Category) -> None:
         self.__parent = parent
     
-    def get_parent_id(self) -> str:
-        return self.get_parent().get_id()
+    def get_parent_name(self) -> str:
+        return self.get_parent().get_name()
     
     def __str__(self):
         return dedent(f"""
                 Id: {self.get_id()}
                 Name: {self.get_name()}
-                Parent: {self.get_parent_id()}
+                Parent: {self.get_parent_name()}
                 """)

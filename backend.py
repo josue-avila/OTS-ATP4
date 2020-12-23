@@ -49,23 +49,38 @@ def list_categories(mktplace):
 
 def list_subcategories(sub):
     while True:
-        try:
-            id = int(input('Id of parent category: '))
-            category = search_sub(id,sub)
+  
+        name = input('name of parent category: ')
+        category = search_sub(name,sub)
+        print(category)
+        if category:
             for subcategory in category:
                 print(subcategory)
             break
-        except ValueError:
-            print("Musta be a number")
-        except AttributeError:
-            print(f'Must be a number between {sub[0].get_parent_id()} e {sub[-1].get_parent_id()} ')
+        else:
+            print('Category not found!')
+        
 
-def search_sub(id,subcategories):
+def search_sub(name,subcategories):
     search_list =[]
     for i in subcategories:
-        if i.get_parent_id() == id:
+        if i.get_parent_name().lower() == name.lower():
             search_list.append(i)
     return search_list
+
+def web_list_sub(position,category,sub):
+    a  = []
+    c = category[int(position)]
+    name = c.get_name()
+    for i in sub:
+        if name.lower() == i.get_parent_name().lower():
+            a.append(i.get_name())
+    return a
+
+def web_list_cat(position,mktplace):
+    m = mktplace[int(position)]
+    categories = m.get_categories()
+    return categories
 
 def search_mkt(id,mktplaces):
     for mktplace in mktplaces:
@@ -80,4 +95,11 @@ def menu():
         print(f'[{i+1}] - {option}')
     op = int(input('\nSelect an option: '))
     return op
+
+def web_menu():
+    marketplaces = {'name': 'Marketplaces', 'route': '/marketplaces'}
+    categories = { 'name': 'Categories', 'route': '/categories/99'}
+    subcategories = {'name': 'Subcategories', 'route': '/subcategories/99'}
+    options = [marketplaces, categories, subcategories]
+    return options
 

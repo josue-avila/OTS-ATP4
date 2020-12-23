@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 import backend
 from classes import Marketplace, Category, SubCategory
 
@@ -11,52 +11,29 @@ mktplace = backend.marketplace_generate(category)
 
 @app.route('/')
 def index():
-    marketplaces = {'name': 'Marketplaces', 'route': '/marketplaces'}
-    categories = { 'name': 'Categories', 'route': '/categories'}
-    subcategories = {'name': 'Subcategories', 'route': '/subcategories'}
-    options = [marketplaces, categories, subcategories]
+    options = backend.web_menu()
     return render_template('index.html', name = app_title, options = options)
 
 @app.route('/marketplaces')
 def mktplaces():
-    category = backend.categories_generate()
-    #subcategory = backend.subcategories_generate(category)
-    mktplace = backend.marketplace_generate(category)
-
     return render_template('marketplaces.html', mktplace = mktplace, len = len(mktplace), name = app_title )
 
-@app.route('/categories')
-def categopries():
-    category = backend.categories_generate()
-    subcategory = backend.subcategories_generate(category)
-    mktplace = backend.marketplace_generate(category)
-
-    return render_template('categories.html', mktplace = mktplace, len = len(mktplace),name = app_title )
-
-@app.route('/categoriesdetail')
-def categopriesdetail():
-    category = backend.categories_generate()
-    subcategory = backend.subcategories_generate(category)
-    mktplace = backend.marketplace_generate(category)
-
-    return render_template('categoriesdetail.html', categories = category, len = len(category), name = app_title )
+@app.route('/categories/<mkt>')
+def categopries(mkt):
+    if int(mkt) < 99:
+        cat = backend.web_list_cat(mkt,mktplace)
+        return render_template('categories.html', categories = cat, len = len(cat),name = app_title )
+    else:
+        return redirect('/marketplaces')
 
 
-@app.route('/subcategories')
-def subategopries():
-    category = backend.categories_generate()
-    subcategory = backend.subcategories_generate(category)
-    mktplace = backend.marketplace_generate(category)
 
-    return render_template('subcategories.html', categories = category, len = len(category),name = app_title )
-
-@app.route('/subcategoriesdetail')
-def subategopriesdetail():
-    category = backend.categories_generate()
-    subcategory = backend.subcategories_generate(category)
-    mktplace = backend.marketplace_generate(category)
-
-    return render_template('subcategoriesdetail.html', subcategories = subcategory, len = len(subcategory), name = app_title )
-
+@app.route('/subcategories/<cat>')
+def subcategories(cat):
+    if int(cat) < 99:
+        sub = backend.web_list_sub(cat,category, subcategory)
+        return render_template('subcategories.html', subcategories= sub, len = len(sub), name = app_title )
+    else:
+        return redirect('/categories/100')
 
 app.run(debug=True)

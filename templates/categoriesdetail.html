@@ -4,8 +4,11 @@
 
 <ol> 
     {%for i in range(0, len)%} 
-        <li>                
-                {{categories[i].get_name()}}
+        <li> 
+            <a href = "/subcategories/{{i}}">
+                {{test[i]}}
+            </a>               
+                
         </li> 
     {%endfor%} 
 {% endblock %}

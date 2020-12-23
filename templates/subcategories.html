@@ -1,13 +1,12 @@
 {% extends 'template.html' %}
 {% block body %}  
-<h3> Choose a category: </h3>
+<h3> Subcategories</h3>
 <ol> 
     {%for i in range(0, len)%} 
         <li>
-            <a href = "/subcategoriesdetail">
-                {{categories[i].get_name()}}
-            </a>
+            {{ subcategories[i] }}
         </li> 
-    {%endfor%} 
+    {%endfor%}
+
 </ol> 
 {% endblock %}

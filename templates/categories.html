@@ -5,8 +5,8 @@
 <ol> 
     {%for i in range(0, len)%} 
         <li>
-            <a href="/categoriesdetail">
-                {{mktplace[i].get_name()}}
+            <a href = "/subcategories/{{i}}">
+                {{categories[i]}}
             </a>
         </li> 
     {%endfor%} 

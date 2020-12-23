@@ -4,7 +4,11 @@
 
 <ol> 
     {%for i in range(0, len)%} 
-        <li>{{mktplace[i].get_name()}}</li> 
+        <li>
+            <a href="/categories/{{i}}">
+                {{mktplace[i].get_name()}}
+            </a>
+        </li> 
     {%endfor%} 
       
 </ol> 
