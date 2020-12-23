@@ -81,22 +81,3 @@ def menu():
     op = int(input('\nSelect an option: '))
     return op
 
-category = categories_generate()
-subcategory = subcategories_generate(category)
-mktplace = marketplace_generate(category)
-
-while True:
-    try:
-        op = menu()
-        if op == 1:
-            list_markeplaces(mktplace)
-        elif op == 2:
-            list_categories(mktplace)
-        elif op == 3:
-            list_subcategories(subcategory)
-        elif op == 4:
-            exit(0)
-        else:
-            print('Invalid option. Try again')
-    except ValueError as err:
-        print('Error: ', err)
