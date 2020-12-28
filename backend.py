@@ -1,31 +1,53 @@
 from classes import Marketplace, Category, SubCategory
 
+categories_path = 'input/categories.txt'
+subcategories_path = 'input/subcategories.txt'
+marketplaces_path = 'input/marketplaces.txt'
+
+def read_categories(path) -> list:
+    lista_linhas_arquivo = []
+    arquivo = open(path, 'r')
+    for linha in arquivo:
+        linha_limpa = linha.strip() 
+        lista_dados_linha = linha_limpa.split(';') 
+        linha_formatada = lista_dados_linha[0]
+        lista_linhas_arquivo.append(linha_formatada)
+    arquivo.close()
+    return lista_linhas_arquivo
+
+def read_mkt_sub(path) -> list:
+    lista_linhas_arquivo = []
+    arquivo = open(path, 'r')
+    for linha in arquivo:
+        linha_limpa = linha.strip() 
+        lista_dados_linha = linha_limpa.split(';')
+        for i in range(len(lista_dados_linha) - 1):
+            linha_formatada = [lista_dados_linha[i],lista_dados_linha[i+1]]
+            lista_linhas_arquivo.append(linha_formatada)
+    arquivo.close()
+    return lista_linhas_arquivo
 
 def categories_generate():
-    eletronics = Category(1,'Eletronics')
-    decoration = Category(2,'Decoration')
-    office = Category(3, 'Office')
-    categories = [eletronics, decoration, office]
+    lista = read_categories(categories_path)
+    categories =[]
+    for i in range(len(lista)):
+        categories.append(Category(i+1,lista[i]))
 
     return categories
 
 def subcategories_generate(categories):
-    phone = SubCategory(4, 'Phone', categories[0])
-    computer =  SubCategory(5, 'Computer', categories[0])
-    art_piece = SubCategory(6, 'Art Piece', categories[1])
-    christmas =SubCategory(7, 'Christmas Stuff', categories[1])
-    desk = SubCategory(8, 'Desk', categories[2])
-    chair = SubCategory(9, 'Chair', categories[2])
-    subcategories = [phone,computer,art_piece,christmas,desk,chair]
+    subcategories = []
+    lista = read_mkt_sub(subcategories_path)
+    for i in range(len(lista)):
+        subcategories.append(SubCategory(i+4,lista[i][0],eval(lista[i][1])))
 
     return subcategories
 
 def marketplace_generate(categories):
-    magalu = Marketplace(1, 'Magalu', categories) 
-    b2w = Marketplace(2, 'B2W', categories)
-    amazon = Marketplace(3, 'Amazon', categories)
-    marketplaces = [magalu,b2w,amazon]
-    
+    marketplaces = []
+    lista = read_mkt_sub(marketplaces_path)
+    for i in range(len(lista)):
+        marketplaces.append(Marketplace(i+1,lista[i][0],eval(lista[i][1])))
     return marketplaces
 
 def list_markeplaces(mktplaces):

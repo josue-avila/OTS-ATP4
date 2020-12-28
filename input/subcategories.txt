@@ -1,0 +1,6 @@
+phone;categories[0]
+computer;categories[0]
+art piece;categories[1]
+christmas stuff;categories[1]
+desk;categories[2]
+chair;categories[2]
