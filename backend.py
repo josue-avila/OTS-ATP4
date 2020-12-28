@@ -1,8 +1,23 @@
 from classes import Marketplace, Category, SubCategory
+import datetime
 
 categories_path = 'input/categories.txt'
 subcategories_path = 'input/subcategories.txt'
 marketplaces_path = 'input/marketplaces.txt'
+
+def dt():
+    dt = datetime.datetime.now()
+    date = f'Date: {dt.strftime("%d")}/{dt.strftime("%m")}/{dt.strftime("%Y")}'
+    time = f'Time: {dt.strftime("%H")}:{dt.strftime("%M")}:{dt.strftime("%S")}'
+    date_time = f'{date} - {time}'
+    return date_time
+
+def save_logs(operation:str) -> None:
+    date_time = dt()
+    arquivo = open('logs/logs.txt','a')
+    arquivo.write(f'{date_time} - Action: {operation}\n')
+    arquivo.close()
+
 
 def read_categories(path) -> list:
     lista_linhas_arquivo = []
@@ -51,11 +66,13 @@ def marketplace_generate(categories):
     return marketplaces
 
 def list_markeplaces(mktplaces):
+    save_logs('List marketplaces (console)')
     for mktplace in mktplaces:
         print(f'{mktplace.get_id()} - {mktplace.get_name()}')
     
    
 def list_categories(mktplace):
+    save_logs('List categories (console)')
     while True:
         try:
             mkt_id = int(input("Id Marketplace: "))
@@ -70,6 +87,7 @@ def list_categories(mktplace):
             print(f'Must be a number between {mktplace[0].get_id()} e {mktplace[-1].get_id()} ')
 
 def list_subcategories(sub):
+    save_logs('List subcategories (console)')
     while True:
   
         name = input('name of parent category: ')
@@ -91,6 +109,7 @@ def search_sub(name,subcategories):
     return search_list
 
 def web_list_sub(position,category,sub):
+    save_logs('List subcategories (web)')
     a  = []
     c = category[int(position)]
     name = c.get_name()
@@ -100,6 +119,7 @@ def web_list_sub(position,category,sub):
     return a
 
 def web_list_cat(position,mktplace):
+    save_logs('List categories (web)')
     m = mktplace[int(position)]
     categories = m.get_categories()
     return categories

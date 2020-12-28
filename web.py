@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect
 import backend
 from classes import Marketplace, Category, SubCategory
 
+
 app = Flask(__name__)
 
 app_title = 'Olist List'
@@ -16,6 +17,7 @@ def index():
 
 @app.route('/marketplaces')
 def mktplaces():
+    backend.save_logs('List marketplaces (web)')
     return render_template('marketplaces.html', mktplace = mktplace, len = len(mktplace), name = app_title )
 
 @app.route('/categories/<mkt>')
