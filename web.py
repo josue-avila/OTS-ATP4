@@ -26,14 +26,12 @@ def categopries(mkt):
     else:
         return redirect('/marketplaces')
 
-
-
 @app.route('/subcategories/<cat>')
 def subcategories(cat):
     if int(cat) < 99:
         sub = backend.web_list_sub(cat,category, subcategory)
         return render_template('subcategories.html', subcategories= sub, len = len(sub), name = app_title )
     else:
-        return redirect('/categories/100')
+        return redirect('/categories/0')
 
 app.run(debug=True)
