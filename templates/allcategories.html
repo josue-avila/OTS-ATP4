@@ -1,12 +1,12 @@
 {% extends 'template.html' %}
 {% block body %}  
-<h3> Marketplaces </h3>
+<h3> All Categories </h3>
 
 <ol> 
     {%for i in range(0, len)%} 
         <li>
-            <a href="/categories/{{mktplace[i].get_name()}}">
-                {{mktplace[i].get_name()}}
+            <a href = "/subcategories/{{categories[i].get_name()}}">
+                {{categories[i].get_name()}}
             </a>
         </li> 
     {%endfor%} 

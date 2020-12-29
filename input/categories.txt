@@ -1,3 +1,6 @@
-eletronics;
-decoration;
-office;
+eletronics
+decoration
+office
+sports
+beauty
+market

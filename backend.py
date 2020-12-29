@@ -5,7 +5,31 @@ categories_path = 'input/categories.txt'
 subcategories_path = 'input/subcategories.txt'
 marketplaces_path = 'input/marketplaces.txt'
 
-def dt():
+# console + web
+def marketplace_gen(categories: list) -> list:
+    marketplaces = []
+    input_mkt = read_input(marketplaces_path)
+    for i in range(len(input_mkt)):
+        mkt = Marketplace(i +1,input_mkt[i][0],eval(input_mkt[i][1]))
+        marketplaces.append(mkt)
+    return marketplaces
+
+def categories_gen() -> list:
+    input_cat = read_input(categories_path)
+    categories = []
+    for i in range(len(input_cat)):
+        categories.append(Category(i + 7,input_cat[i][0]))
+    return categories
+
+def subcategories_gen(categories) -> list:
+    subcategories = []
+    input_sub = read_input(subcategories_path)
+    for i in range(len(input_sub)):
+        sub = SubCategory(i + 7,input_sub[i][0],eval(input_sub[i][1]))
+        subcategories.append(sub)
+    return subcategories
+
+def instant_datetime() -> str:
     dt = datetime.datetime.now()
     date = f'Date: {dt.strftime("%d")}/{dt.strftime("%m")}/{dt.strftime("%Y")}'
     time = f'Time: {dt.strftime("%H")}:{dt.strftime("%M")}:{dt.strftime("%S")}'
@@ -13,84 +37,49 @@ def dt():
     return date_time
 
 def save_logs(operation:str) -> None:
-    date_time = dt()
+    date_time = instant_datetime()
     arquivo = open('logs/logs.txt','a')
     arquivo.write(f'{date_time} - Action: {operation}\n')
     arquivo.close()
 
-
-def read_categories(path) -> list:
-    lista_linhas_arquivo = []
-    arquivo = open(path, 'r')
-    for linha in arquivo:
-        linha_limpa = linha.strip() 
-        lista_dados_linha = linha_limpa.split(';') 
-        linha_formatada = lista_dados_linha[0]
-        lista_linhas_arquivo.append(linha_formatada)
-    arquivo.close()
-    return lista_linhas_arquivo
-
-def read_mkt_sub(path) -> list:
+def read_input(path:str) -> list:
     lista_linhas_arquivo = []
     arquivo = open(path, 'r')
     for linha in arquivo:
         linha_limpa = linha.strip() 
         lista_dados_linha = linha_limpa.split(';')
-        for i in range(len(lista_dados_linha) - 1):
-            linha_formatada = [lista_dados_linha[i],lista_dados_linha[i+1]]
-            lista_linhas_arquivo.append(linha_formatada)
+        lista_linhas_arquivo.append(lista_dados_linha)
     arquivo.close()
     return lista_linhas_arquivo
 
-def categories_generate():
-    lista = read_categories(categories_path)
-    categories =[]
-    for i in range(len(lista)):
-        categories.append(Category(i+1,lista[i]))
+# console 
+def menu() -> int:
+    options = ['List Marketplaces','List Categories','List SubCategories', 'Sair']
+    print('\nMENU: ')
+    for i, option in enumerate(options):
+        print(f'[{i+1}] - {option}')
+    option = int(input('\nSelect an option: '))
+    return option
 
-    return categories
-
-def subcategories_generate(categories):
-    subcategories = []
-    lista = read_mkt_sub(subcategories_path)
-    for i in range(len(lista)):
-        subcategories.append(SubCategory(i+4,lista[i][0],eval(lista[i][1])))
-
-    return subcategories
-
-def marketplace_generate(categories):
-    marketplaces = []
-    lista = read_mkt_sub(marketplaces_path)
-    for i in range(len(lista)):
-        marketplaces.append(Marketplace(i+1,lista[i][0],eval(lista[i][1])))
-    return marketplaces
-
-def list_markeplaces(mktplaces):
-    save_logs('List marketplaces (console)')
+def list_markeplaces(mktplaces: Marketplace) -> None:
     for mktplace in mktplaces:
         print(f'{mktplace.get_id()} - {mktplace.get_name()}')
     
-   
-def list_categories(mktplace):
-    save_logs('List categories (console)')
+def list_categories(mktplace:list) -> None:
     while True:
-        try:
-            mkt_id = int(input("Id Marketplace: "))
-            mkt = search_mkt(mkt_id,mktplace)
+        name = input("Name of marketplace: ")
+        mkt = search_mkt(name,mktplace)
+        if mkt:   
             categories = mkt.get_categories()
             for category in categories:
                 print(category)
             break
-        except ValueError:
-            print("Musta be a number")
-        except AttributeError:
-            print(f'Must be a number between {mktplace[0].get_id()} e {mktplace[-1].get_id()} ')
-
-def list_subcategories(sub):
-    save_logs('List subcategories (console)')
+        else:
+            print('Marketplace not found!')
+            
+def list_subcategories(sub:list) -> None:
     while True:
-  
-        name = input('name of parent category: ')
+        name = input('Name of parent category: ')
         category = search_sub(name,sub)
         print(category)
         if category:
@@ -99,49 +88,39 @@ def list_subcategories(sub):
             break
         else:
             print('Category not found!')
-        
 
-def search_sub(name,subcategories):
+def search_sub(name:str,subcategories:list) -> list:
     search_list =[]
     for i in subcategories:
         if i.get_parent_name().lower() == name.lower():
             search_list.append(i)
     return search_list
 
-def web_list_sub(position,category,sub):
-    save_logs('List subcategories (web)')
-    a  = []
-    c = category[int(position)]
-    name = c.get_name()
-    for i in sub:
-        if name.lower() == i.get_parent_name().lower():
-            a.append(i.get_name())
-    return a
-
-def web_list_cat(position,mktplace):
-    save_logs('List categories (web)')
-    m = mktplace[int(position)]
-    categories = m.get_categories()
-    return categories
-
-def search_mkt(id,mktplaces):
+def search_mkt(name:str,mktplaces:list) -> Marketplace:
     for mktplace in mktplaces:
-        if mktplace.get_id() == id:
+        if mktplace.get_name().lower() == name.lower():
             return mktplace
 
-def menu():
-    options = ['List Marketplaces','List Categories','List SubCategories', 'Sair']
-    print('\nMENU: ')
-
-    for i, option in enumerate(options):
-        print(f'[{i+1}] - {option}')
-    op = int(input('\nSelect an option: '))
-    return op
-
-def web_menu():
+# web
+def web_menu() -> list:
     marketplaces = {'name': 'Marketplaces', 'route': '/marketplaces'}
-    categories = { 'name': 'Categories', 'route': '/categories/99'}
-    subcategories = {'name': 'Subcategories', 'route': '/subcategories/99'}
+    categories = { 'name': 'Categories', 'route': '/marketplaces'}
+    subcategories = {'name': 'Subcategories', 'route': '/allcategories'}
     options = [marketplaces, categories, subcategories]
     return options
 
+def web_list_cat(name:str,mktplace:list) -> list:
+    save_logs('List categories (web)')
+    for i in mktplace:
+        if i.get_name().lower() == name.lower():
+            categories = i.get_categories()
+    return categories  
+
+def web_list_sub(name:str,categories:list,sub:list) -> list:
+    save_logs('List subcategories (web)')
+    subcategories = []
+    for i in sub:
+        if i.get_parent_name().lower() == name.lower():
+            subcategories.append(i)
+    return subcategories
+   

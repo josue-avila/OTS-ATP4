@@ -1,3 +1,6 @@
-Magalu;categories
-Amazon;categories
-B2W;categories
+Magalu;categories[:3]
+Amazon;categories[:3]
+B2W;categories[1:4]
+Via Varejo;categories[3:]
+Mercado Livre;categories[2:]
+Olx;categories[1:2]

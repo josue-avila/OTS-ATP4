@@ -4,7 +4,7 @@
 <ol> 
     {%for i in range(0, len)%} 
         <li>
-            {{ subcategories[i] }}
+            {{ subcategories[i].get_name() }}
         </li> 
     {%endfor%}
 

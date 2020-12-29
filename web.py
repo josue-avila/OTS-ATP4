@@ -6,9 +6,9 @@ from classes import Marketplace, Category, SubCategory
 app = Flask(__name__)
 
 app_title = 'Olist List'
-category = backend.categories_generate()
-subcategory = backend.subcategories_generate(category)
-mktplace = backend.marketplace_generate(category)
+category = backend.categories_gen()
+subcategory = backend.subcategories_gen(category)
+mktplace = backend.marketplace_gen(category)
 
 @app.route('/')
 def index():
@@ -22,18 +22,17 @@ def mktplaces():
 
 @app.route('/categories/<mkt>')
 def categopries(mkt):
-    if int(mkt) < 99:
-        cat = backend.web_list_cat(mkt,mktplace)
-        return render_template('categories.html', categories = cat, len = len(cat),name = app_title )
-    else:
-        return redirect('/marketplaces')
+    cat = backend.web_list_cat(mkt,mktplace)
+    return render_template('categories.html', categories = cat, len = len(cat),name = app_title )
+
+@app.route('/allcategories')
+def allcategories():
+    return render_template('allcategories.html', categories = category, len = len(category),name = app_title)
 
 @app.route('/subcategories/<cat>')
 def subcategories(cat):
-    if int(cat) < 99:
-        sub = backend.web_list_sub(cat,category, subcategory)
-        return render_template('subcategories.html', subcategories= sub, len = len(sub), name = app_title )
-    else:
-        return redirect('/categories/0')
+    sub = backend.web_list_sub(cat,category, subcategory)
+    return render_template('subcategories.html', subcategories= sub, len = len(sub), name = app_title )
+
 
 app.run(debug=True)
