@@ -31,15 +31,15 @@ def subcategories_gen(categories) -> list:
 
 def instant_datetime() -> str:
     dt = datetime.datetime.now()
-    date = f'Date: {dt.strftime("%d")}/{dt.strftime("%m")}/{dt.strftime("%Y")}'
-    time = f'Time: {dt.strftime("%H")}:{dt.strftime("%M")}:{dt.strftime("%S")}'
-    date_time = f'{date} - {time}'
+    date = f'{dt.strftime("%d")}/{dt.strftime("%m")}/{dt.strftime("%Y")}'
+    time = f'{dt.strftime("%H")}:{dt.strftime("%M")}:{dt.strftime("%S")}'
+    date_time = f'{date};{time}'
     return date_time
 
 def save_logs(operation:str) -> None:
     date_time = instant_datetime()
     arquivo = open('logs/logs.txt','a')
-    arquivo.write(f'{date_time} - Action: {operation}\n')
+    arquivo.write(f'{date_time};{operation}\n')
     arquivo.close()
 
 def read_input(path:str) -> list:
@@ -52,9 +52,48 @@ def read_input(path:str) -> list:
     arquivo.close()
     return lista_linhas_arquivo
 
+def read_logs():
+    try:
+        log_list =[]
+        file = open('logs/logs.txt','r')
+        for line in file:
+            clean_line = line.strip(';')
+            list_data_line = clean_line.split(';')
+            formataded = f'Date: {list_data_line[0]} Time: {list_data_line[1]} Action: {list_data_line[2]}'
+            log_list.append(formataded)
+        return log_list
+    except:
+        raise FileNotFoundError('There is no logs yet!')
+
+def print_logs():
+    logs = read_logs()
+    while True:
+        try:
+            tail = int(input('Number of elements u want to see (Zero to view all of them): '))
+            if tail > 0:
+                for log in logs[-tail:]:
+                    print(log)
+                break
+            elif tail == 0:
+                for log in logs:
+                    print(log)
+                break   
+            else:
+                print('Needs to be a valid number (greater then zero)')
+        except:
+            raise ValueError('Needs to be a valid number (greater then zero)')
+
 # console 
+def log_menu():
+    options = ['Filter by Date','Filter by Action','Sair']
+    print('\nMENU: ')
+    for i, option in enumerate(options):
+        print(f'[{i+1}] - {option}')
+    option = int(input('\nSelect an option: '))
+    return option
+
 def menu() -> int:
-    options = ['List Marketplaces','List Categories','List SubCategories', 'Sair']
+    options = ['List Marketplaces','List Categories','List SubCategories', 'Logs','Sair']
     print('\nMENU: ')
     for i, option in enumerate(options):
         print(f'[{i+1}] - {option}')
@@ -81,7 +120,6 @@ def list_subcategories(sub:list) -> None:
     while True:
         name = input('Name of parent category: ')
         category = search_sub(name,sub)
-        print(category)
         if category:
             for subcategory in category:
                 print(subcategory)

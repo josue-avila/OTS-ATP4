@@ -17,8 +17,12 @@ while True:
             backend.save_logs('List subcategories (console)')
             backend.list_subcategories(subcategory)
         elif option == 4:
+            backend.print_logs()
+        elif option == 5:
             exit(0)
         else:
             print('Invalid option. Try again')
     except ValueError as err:
+        print('Error: ', err)
+    except FileNotFoundError as err:
         print('Error: ', err)
