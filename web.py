@@ -21,19 +21,18 @@ def add():
 
 @app.route('/add_mkt', methods=['GET','POST'])
 def add_mkt():
-    categories = []
-    name = request.form.get('name')
-    categories_names = request.form.getlist('operacao')
+    name = request.args.get('name')
+    categories_names = request.args.keys()
+    categories=[]
     for category_name in categories_names:
         cat = backend.search_cat(category_name,category)
         categories.append(cat)
-    new_mktplace = backend.new_mktplace(name, categories, mktplace)
+    new_mktplace = backend.new_mktplace(name, categories[1:], mktplace)
     if new_mktplace:
         backend.save_logs('Add new marketplace (web)')
         return f'Succes!'
     else:
         return f'Marketplace already exists!'
-
 
 @app.route('/marketplaces')
 def mktplaces():
