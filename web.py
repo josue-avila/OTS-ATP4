@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request
 import backend
 from classes import Marketplace, Category, SubCategory
 
@@ -14,6 +14,26 @@ mktplace = backend.marketplace_gen(category)
 def index():
     options = backend.web_menu()
     return render_template('index.html', name = app_title, options = options)
+
+@app.route('/add')
+def add():
+    return render_template('add.html',categories = category, len = len(category),n = app_title)
+
+@app.route('/add_mkt', methods=['GET','POST'])
+def add_mkt():
+    categories = []
+    name = request.form.get('name')
+    categories_names = request.form.getlist('operacao')
+    for category_name in categories_names:
+        cat = backend.search_cat(category_name,category)
+        categories.append(cat)
+    new_mktplace = backend.new_mktplace(name, categories, mktplace)
+    if new_mktplace:
+        backend.save_logs('Add new marketplace (web)')
+        return f'Succes!'
+    else:
+        return f'Marketplace already exists!'
+
 
 @app.route('/marketplaces')
 def mktplaces():

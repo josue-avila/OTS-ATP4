@@ -139,11 +139,18 @@ def search_mkt(name:str,mktplaces:list) -> Marketplace:
         if mktplace.get_name().lower() == name.lower():
             return mktplace
 
+def search_cat(name:str,categories:list) -> Category:
+    for category in categories:
+        if category.get_name().lower() == name.lower():
+            return category
+
+
 # web
 def web_menu() -> list:
     marketplaces = {'name': 'Marketplaces', 'route': '/marketplaces'}
     categories = { 'name': 'Categories', 'route': '/marketplaces'}
     subcategories = {'name': 'Subcategories', 'route': '/allcategories'}
+    
     options = [marketplaces, categories, subcategories]
     return options
 
@@ -161,4 +168,10 @@ def web_list_sub(name:str,categories:list,sub:list) -> list:
         if i.get_parent_name().lower() == name.lower():
             subcategories.append(i)
     return subcategories
-   
+
+def new_mktplace(name: str, c:str, marketplaces:list):
+    search = search_mkt(name,marketplaces)
+    if not search:
+        mkt = Marketplace(len(marketplaces) + 1,name,c)
+        marketplaces.append(mkt)
+        return marketplaces

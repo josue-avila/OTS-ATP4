@@ -1,0 +1,17 @@
+{% extends 'template.html' %}
+{% block body %}
+
+<h3> New Marketplace </h3>
+<form method= 'POST' action='/add_mkt' > 
+    <label>Name:</label><br/> <input type='text' name='name' required/> <br />
+    <p>Categories:</p>
+    {% for i in range(0,len) %}
+        <input type='checkbox' value="{{categories[i].get_name()}}" name='operacao' checked />
+        <label>{{categories[i].get_name()}}</label> <br />
+    {%  endfor %}
+    <br/>
+
+    <input type='submit' value='Save' /> <br />
+</form>
+
+{% endblock %}
