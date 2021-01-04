@@ -1,4 +1,7 @@
-import backend
+
+import sys
+sys.path.append('project/')
+import back.backend as backend # pylint: disable=import-error
 
 category = backend.categories_gen()
 subcategory = backend.subcategories_gen(category)

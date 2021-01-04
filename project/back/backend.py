@@ -1,9 +1,9 @@
-from classes import Marketplace, Category, SubCategory
+from back.classes import Marketplace, Category, SubCategory # pylint: disable=import-error
 import datetime
 
-categories_path = 'input/categories.txt'
-subcategories_path = 'input/subcategories.txt'
-marketplaces_path = 'input/marketplaces.txt'
+categories_path = 'project/back/input/categories.txt'
+subcategories_path = 'project/back/input/subcategories.txt'
+marketplaces_path = 'project/back/input/marketplaces.txt'
 
 # console + web
 def marketplace_gen(categories: list) -> list:
@@ -38,9 +38,9 @@ def instant_datetime() -> str:
 
 def save_logs(operation:str) -> None:
     date_time = instant_datetime()
-    arquivo = open('logs/logs.txt','a')
-    arquivo.write(f'{date_time};{operation}\n')
-    arquivo.close()
+    file = open('project/back/logs/logs.txt','a')
+    file.write(f'{date_time};{operation}\n')
+    file.close()
 
 def read_input(path:str) -> list:
     lista_linhas_arquivo = []
@@ -55,7 +55,7 @@ def read_input(path:str) -> list:
 def read_logs():
     try:
         log_list =[]
-        file = open('logs/logs.txt','r')
+        file = open('project/back/logs/logs.txt','r')
         for line in file:
             clean_line = line.strip(';')
             list_data_line = clean_line.split(';')
@@ -150,8 +150,12 @@ def web_menu() -> list:
     marketplaces = {'name': 'Marketplaces', 'route': '/marketplaces'}
     categories = { 'name': 'Categories', 'route': '/marketplaces'}
     subcategories = {'name': 'Subcategories', 'route': '/allcategories'}
+
+    add_mkt = {'name': 'Add New Marketplace', 'route': '/add/marketplace'}
+    add_cat = {'name': 'Add New Category', 'route': '/add/categories'}
+    add_sub = {'name': 'Add New Subcategory', 'route': '/add/subcategories'}
     
-    options = [marketplaces, categories, subcategories]
+    options = [marketplaces, categories, subcategories, add_mkt, add_cat, add_sub]
     return options
 
 def web_list_cat(name:str,mktplace:list) -> list:
@@ -169,9 +173,39 @@ def web_list_sub(name:str,categories:list,sub:list) -> list:
             subcategories.append(i)
     return subcategories
 
-def new_mktplace(name: str, c:str, marketplaces:list):
+def new_mktplace(name: str, categories:list, marketplaces:list):
     search = search_mkt(name,marketplaces)
+    c=[]
     if not search:
-        mkt = Marketplace(len(marketplaces) + 1,name,c)
+        mkt = Marketplace(len(marketplaces) + 1,name,categories)
         marketplaces.append(mkt)
+        for i in categories:
+            c.append(i.get_name())
+        write_mktplace(name,c)
         return marketplaces
+
+def new_cat(name:str,categories:list):
+    search = search_cat(name,categories)
+    if not search:
+        cat = Category(len(categories)+1,name)
+        categories.append(cat)
+        return categories
+
+def write_mktplace(name:str, categories:list):
+    file = open(marketplaces_path,'a')
+    file.write(f'\n{name};{categories}')
+    file.close()
+
+'''
+def read_test():
+    lista_linhas_arquivo=[]
+    file = open(marketplaces_path,'r')
+    for linha in file:
+        linha_limpa = linha.strip() 
+        lista_dados_linha = linha_limpa.split(';')
+        lista_linhas_arquivo.append(lista_dados_linha)
+    file.close()
+    return lista_linhas_arquivo[6][1]
+
+
+print(read_test())'''

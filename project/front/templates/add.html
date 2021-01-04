@@ -1,0 +1,44 @@
+{% extends 'template.html' %}
+{% block body %}
+
+{%if option=='marketplace'%}
+<h3> New Marketplace </h3>
+<form action='/add_mkt' > 
+    <label>Name:</label><br/> <input type='text' name='name' required/> <br />
+    <p>Categories:</p>
+    {% for i in range(0,len) %}
+        <input type='checkbox' value="{{categories[i].get_name()}}" name='{{categories[i].get_name()}}' checked />
+        <label>{{categories[i].get_name()}}</label> <br />
+    {%  endfor %}
+    <br/>
+
+    <input type='submit' value='Save' /> <br />
+</form>
+{%endif%}
+
+{%if option=='categories'%}
+<h3> New Category </h3>
+<form action='/add_cat' > 
+    <label>Name:</label><br/> <input type='text' name='name' required/> <br />
+    <input type='submit' value='Save' /> <br />
+</form>
+{%endif%}
+
+{%if option=='subcategories'%}
+<h3> New SubCategory </h3>
+<form action='/add_sub' > 
+    <label>Name:</label><br/> <input type='text' name='name' required/> <br />
+    <p>Parent Category:</p>
+    {% for i in range(0,len) %}
+        <input type='radio' value="{{categories[i].get_name()}}" name= operation {%if categories[i].get_name()=='eletronics' %}checked {%endif%}/>
+        <label>{{categories[i].get_name()}}</label> <br />
+    {%  endfor %}
+    <br/>
+    <input type='submit' value='Save' /> <br />
+</form>
+{%endif%}
+
+
+
+
+{% endblock %}

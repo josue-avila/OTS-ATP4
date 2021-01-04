@@ -1,6 +1,8 @@
+import sys
+sys.path.append('project/')
 from flask import Flask, render_template, redirect, request
-import backend
-from classes import Marketplace, Category, SubCategory
+import back.backend as backend #pylint: disable=import-error
+from back.classes import Marketplace, Category, SubCategory #pylint: disable=import-error
 
 
 app = Flask(__name__)
@@ -15,9 +17,9 @@ def index():
     options = backend.web_menu()
     return render_template('index.html', name = app_title, options = options)
 
-@app.route('/add')
-def add():
-    return render_template('add.html',categories = category, len = len(category),n = app_title)
+@app.route('/add/<option>')
+def add(option):
+    return render_template('add.html',categories = category, len = len(category),n = app_title, option=option)
 
 @app.route('/add_mkt', methods=['GET','POST'])
 def add_mkt():
@@ -33,6 +35,15 @@ def add_mkt():
         return f'Succes!'
     else:
         return f'Marketplace already exists!'
+
+def add_cat():
+    name = request.args.get('name')
+    new_cat = backend.new_cat(name,category)
+    if new_cat:
+        backend.save_logs('Add new category(web)')
+        return f'Succes!'
+    else:
+        return f'Category already exists!'
 
 @app.route('/marketplaces')
 def mktplaces():
